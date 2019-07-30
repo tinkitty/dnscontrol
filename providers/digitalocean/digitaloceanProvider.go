@@ -238,8 +238,8 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) *godo.DomainRecordE
 		priority = int(rc.MxPreference)
 	case "SRV":
 		priority = int(rc.SrvPriority)
-	case "TXT":
-		// TXT records are the one place where DO combines many items into one field.
+	case "TXT", "CAA":
+		// TXT and CAA records are the two places where DO combines many items into one field.
 		target = rc.GetTargetCombined()
 	default:
 		// no action required
