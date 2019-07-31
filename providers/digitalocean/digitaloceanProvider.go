@@ -238,9 +238,14 @@ func toReq(dc *models.DomainConfig, rc *models.RecordConfig) *godo.DomainRecordE
 		priority = int(rc.MxPreference)
 	case "SRV":
 		priority = int(rc.SrvPriority)
-	case "TXT", "CAA":
-		// TXT and CAA records are the two places where DO combines many items into one field.
+	case "TXT":
+		// TXT records are the one place where DO combines many items into one field.
 		target = rc.GetTargetCombined()
+	case "CAA":
+		// For CAA records, the DO API seems to require that the URL in the Data field ends with a '.'.
+		if !strings.HasSuffix(target, ".") {
+			target += "."
+		}
 	default:
 		// no action required
 	}
